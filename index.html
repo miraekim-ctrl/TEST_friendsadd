@@ -36,9 +36,56 @@
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             font-size: 0.95rem;
             font-weight: 400;
+        }
+
+        /* Main Tabs */
+        .main-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .main-tab {
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+
+        .main-tab:hover {
+            color: #1a1a1a;
+        }
+
+        .main-tab.active {
+            color: #1a1a1a;
+            border-bottom-color: #3b82f6;
+        }
+
+        /* Sections */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-left: 8px;
+            border-left: 4px solid #3b82f6;
         }
 
         .prototype-grid {
@@ -192,34 +239,55 @@
             margin-right: 6px;
         }
 
-        .reference-btn {
-            width: 100%;
-            margin-top: 16px;
-            padding: 12px 20px;
+        /* Reference Cards */
+        .reference-section {
+            margin-bottom: 60px;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .reference-card {
             background: #ffffff;
-            border: 2px solid #3b82f6;
-            color: #3b82f6;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            text-align: center;
         }
 
-        .reference-btn:hover {
-            background: #3b82f6;
-            color: white;
+        .reference-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
         }
 
-        .reference-btn:disabled {
-            background: #f3f4f6;
-            border-color: #e5e7eb;
-            color: #9ca3af;
-            cursor: not-allowed;
+        .reference-card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .reference-card-count {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .reference-card-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #eff6ff;
+            color: #3b82f6;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 12px;
         }
 
         .modal {
@@ -403,9 +471,17 @@
 <body>
     <div class="container">
         <h1>Find friends UI테스트 비교</h1>
-        <p class="subtitle">각 디자인을 클릭하면 상세 화면을 볼 수 있습니다</p>
+        <p class="subtitle">프로토타입 비교 및 레퍼런스 모음</p>
 
-        <div class="prototype-grid">
+        <!-- Main Tabs -->
+        <div class="main-tabs">
+            <div class="main-tab active" data-tab="prototypes">프로토타입 비교</div>
+            <div class="main-tab" data-tab="references">레퍼런스 모음</div>
+        </div>
+
+        <!-- Prototypes Section -->
+        <div class="tab-content active" id="prototypes">
+            <div class="prototype-grid">
             <!-- Prototype E -->
             <div class="prototype-card" data-prototype="E">
                 <div class="card-header">
@@ -434,9 +510,6 @@
                             <li>시니어나 디지털 문해력이 낮은 사용자에게 다소 어려울 수 있음</li>
                         </ul>
                     </div>
-                    <button class="reference-btn" onclick="openReferenceModal('E', event)">
-                        레퍼런스 보기
-                    </button>
                 </div>
             </div>
 
@@ -466,9 +539,6 @@
                             <li>LINE의 젊은 브랜드 이미지와 다소 불일치</li>
                         </ul>
                     </div>
-                    <button class="reference-btn" onclick="openReferenceModal('A', event)">
-                        레퍼런스 보기
-                    </button>
                 </div>
             </div>
 
@@ -528,9 +598,6 @@
                             <li>좌우 정렬이 달라 시선 흐름이 불안정함</li>
                         </ul>
                     </div>
-                    <button class="reference-btn" onclick="openReferenceModal('C', event)">
-                        레퍼런스 보기
-                    </button>
                 </div>
             </div>
 
@@ -560,9 +627,72 @@
                             <li>수평 공간을 많이 사용해 콘텐츠 영역 압박</li>
                         </ul>
                     </div>
-                    <button class="reference-btn" onclick="openReferenceModal('D', event)">
-                        레퍼런스 보기
-                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- References Section -->
+        <div class="tab-content" id="references">
+            <!-- Type별 레퍼런스 -->
+            <div class="reference-section">
+                <h2 class="section-title">Type별 레퍼런스</h2>
+                <div class="reference-grid">
+                    <div class="reference-card" onclick="openReferenceModal('A')">
+                        <div class="reference-card-title">Type A</div>
+                        <div class="reference-card-count">탭 버튼 스타일</div>
+                        <div class="reference-card-badge">15개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openReferenceModal('C')">
+                        <div class="reference-card-title">Type C</div>
+                        <div class="reference-card-count">왼쪽 타이틀 + 소형 탭</div>
+                        <div class="reference-card-badge">8개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openReferenceModal('D')">
+                        <div class="reference-card-title">Type D</div>
+                        <div class="reference-card-count">아이콘 + 텍스트 탭</div>
+                        <div class="reference-card-badge">7개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openReferenceModal('E')">
+                        <div class="reference-card-title">Type E</div>
+                        <div class="reference-card-count">미니멀 텍스트 탭</div>
+                        <div class="reference-card-badge">24개 화면</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 앱별 레퍼런스 -->
+            <div class="reference-section">
+                <h2 class="section-title">앱별 레퍼런스</h2>
+                <div class="reference-grid">
+                    <div class="reference-card" onclick="openAppReferenceModal('Discord')">
+                        <div class="reference-card-title">Discord</div>
+                        <div class="reference-card-badge">6개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openAppReferenceModal('Lapse')">
+                        <div class="reference-card-title">Lapse</div>
+                        <div class="reference-card-badge">4개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openAppReferenceModal('Locket')">
+                        <div class="reference-card-title">Locket</div>
+                        <div class="reference-card-badge">4개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openAppReferenceModal('Wechat')">
+                        <div class="reference-card-title">WeChat</div>
+                        <div class="reference-card-badge">3개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openAppReferenceModal('X')">
+                        <div class="reference-card-title">X (Twitter)</div>
+                        <div class="reference-card-badge">5개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openAppReferenceModal('듀오링고')">
+                        <div class="reference-card-title">듀오링고</div>
+                        <div class="reference-card-badge">16개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openAppReferenceModal('카카오톡')">
+                        <div class="reference-card-title">카카오톡</div>
+                        <div class="reference-card-badge">7개 화면</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -638,6 +768,7 @@
         let currentRefType = 'A';
         let currentRefIndex = 0;
         let refImages = [];
+        let isAppReference = false;
 
         // Reference image lists
         const referenceImages = {
@@ -704,6 +835,84 @@
                 'eBay iOS 507.png'
             ]
         };
+
+        // App-based reference images
+        const appReferenceImages = {
+            'Discord': [
+                'Discord iOS 100.png',
+                'Discord iOS 22.png',
+                'Discord iOS 28408.png',
+                'Discord iOS 35.png',
+                'Discord iOS 98.png',
+                'Discord iOS 99.png'
+            ],
+            'Lapse': [
+                'Lapse iOS 128.png',
+                'Lapse iOS 136.png',
+                'Lapse iOS 144.png',
+                'Lapse iOS 145.png'
+            ],
+            'Locket': [
+                'Locket iOS 93.png',
+                'Locket iOS 95.png',
+                'Locket iOS 96.png',
+                'Locket iOS 97.png'
+            ],
+            'Wechat': [
+                'WeChat iOS 203.png',
+                'WeChat iOS 211.png',
+                'WeChat iOS 212.png'
+            ],
+            'X': [
+                'X iOS 581.png',
+                'X iOS 618.png',
+                'X iOS 619.png',
+                'X iOS 620.png',
+                'X iOS 625.png'
+            ],
+            '듀오링고': [
+                'Duolingo iOS 402.png',
+                'Duolingo iOS 403.png',
+                'Duolingo iOS 404.png',
+                'Duolingo iOS 405.png',
+                'Duolingo iOS 406.png',
+                'Duolingo iOS 407.png',
+                'Duolingo iOS 408.png',
+                'Duolingo iOS 409.png',
+                'Duolingo iOS 410.png',
+                'Duolingo iOS 411.png',
+                'Duolingo iOS 412.png',
+                'Duolingo iOS 413.png',
+                'Duolingo iOS 414.png',
+                'Duolingo iOS 415.png',
+                'Duolingo iOS 416.png',
+                'Duolingo iOS 417.png'
+            ],
+            '카카오톡': [
+                'IMG_1221.PNG',
+                'IMG_1222.PNG',
+                'IMG_1223.PNG',
+                'IMG_1224.PNG',
+                'IMG_1225.PNG',
+                'IMG_1226.PNG',
+                'IMG_1227.JPG'
+            ]
+        };
+
+        // Main tab switching
+        document.querySelectorAll('.main-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetTab = this.dataset.tab;
+
+                // Update active tab
+                document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
 
         // Open modal
         document.querySelectorAll('.prototype-card').forEach(card => {
@@ -814,6 +1023,7 @@
             if (e) {
                 e.stopPropagation();
             }
+            isAppReference = false;
             currentRefType = type;
             currentRefIndex = 0;
             refImages = referenceImages[type] || [];
@@ -829,6 +1039,59 @@
         function closeRefModal() {
             referenceModal.classList.remove('active');
             document.body.style.overflow = 'auto';
+        }
+
+        // App Reference Modal Function
+        function openAppReferenceModal(appName) {
+            isAppReference = true;
+            currentRefType = appName;
+            currentRefIndex = 0;
+            refImages = appReferenceImages[appName] || [];
+
+            if (refImages.length === 0) return;
+
+            referenceModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateAppRefImage();
+            createAppRefThumbnails();
+        }
+
+        function updateAppRefImage() {
+            refMainImage.src = `앱별_레퍼런스/${currentRefType}/${refImages[currentRefIndex]}`;
+            refModalTitle.textContent = `${currentRefType} - 앱별 레퍼런스`;
+            refImageCounter.textContent = `${currentRefIndex + 1} / ${refImages.length}`;
+
+            refPrevBtn.disabled = currentRefIndex === 0;
+            refNextBtn.disabled = currentRefIndex === refImages.length - 1;
+
+            document.querySelectorAll('#refThumbnailStrip .thumbnail-item').forEach((thumb, index) => {
+                if (index === currentRefIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+
+        function createAppRefThumbnails() {
+            refThumbnailStrip.innerHTML = '';
+            refImages.forEach((img, index) => {
+                const thumbDiv = document.createElement('div');
+                thumbDiv.className = 'thumbnail-item';
+                if (index === 0) thumbDiv.classList.add('active');
+
+                const thumbImg = document.createElement('img');
+                thumbImg.src = `앱별_레퍼런스/${currentRefType}/${img}`;
+                thumbImg.alt = `Reference ${index + 1}`;
+
+                thumbDiv.appendChild(thumbImg);
+                thumbDiv.addEventListener('click', () => {
+                    currentRefIndex = index;
+                    updateAppRefImage();
+                });
+
+                refThumbnailStrip.appendChild(thumbDiv);
+            });
         }
 
         function updateRefImage() {
@@ -880,14 +1143,14 @@
         refPrevBtn.addEventListener('click', () => {
             if (currentRefIndex > 0) {
                 currentRefIndex--;
-                updateRefImage();
+                isAppReference ? updateAppRefImage() : updateRefImage();
             }
         });
 
         refNextBtn.addEventListener('click', () => {
             if (currentRefIndex < refImages.length - 1) {
                 currentRefIndex++;
-                updateRefImage();
+                isAppReference ? updateAppRefImage() : updateRefImage();
             }
         });
 
@@ -896,10 +1159,10 @@
             if (referenceModal.classList.contains('active')) {
                 if (e.key === 'ArrowLeft' && currentRefIndex > 0) {
                     currentRefIndex--;
-                    updateRefImage();
+                    isAppReference ? updateAppRefImage() : updateRefImage();
                 } else if (e.key === 'ArrowRight' && currentRefIndex < refImages.length - 1) {
                     currentRefIndex++;
-                    updateRefImage();
+                    isAppReference ? updateAppRefImage() : updateRefImage();
                 } else if (e.key === 'Escape') {
                     closeRefModal();
                 }
