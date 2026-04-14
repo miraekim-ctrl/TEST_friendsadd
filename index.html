@@ -138,7 +138,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3b82f6;
             color: white;
             padding: 6px 14px;
             border-radius: 20px;
@@ -146,17 +146,6 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-            }
-            50% {
-                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.6);
-            }
         }
 
         .recommended-badge {
@@ -453,8 +442,35 @@
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding: 10px 0;
-            justify-content: center;
+            padding: 10px 0 20px 0;
+            justify-content: flex-start;
+            cursor: grab;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .thumbnail-strip:active {
+            cursor: grabbing;
+        }
+
+        /* Custom Scrollbar */
+        .thumbnail-strip::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .thumbnail-strip::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-radius: 10px;
+        }
+
+        .thumbnail-strip::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #3b82f6 0%, #667eea 100%);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .thumbnail-strip::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #2563eb 0%, #5b68e6 100%);
         }
 
         .thumbnail-item {
@@ -1235,6 +1251,57 @@
                 }
             }
         });
+
+        // Drag to scroll functionality for thumbnail strips
+        function enableDragScroll(element) {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            element.addEventListener('mousedown', (e) => {
+                isDown = true;
+                element.style.cursor = 'grabbing';
+                startX = e.pageX - element.offsetLeft;
+                scrollLeft = element.scrollLeft;
+            });
+
+            element.addEventListener('mouseleave', () => {
+                isDown = false;
+                element.style.cursor = 'grab';
+            });
+
+            element.addEventListener('mouseup', () => {
+                isDown = false;
+                element.style.cursor = 'grab';
+            });
+
+            element.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - element.offsetLeft;
+                const walk = (x - startX) * 2;
+                element.scrollLeft = scrollLeft - walk;
+            });
+
+            // Touch support for mobile
+            let touchStartX = 0;
+            let touchScrollLeft = 0;
+
+            element.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].pageX;
+                touchScrollLeft = element.scrollLeft;
+            });
+
+            element.addEventListener('touchmove', (e) => {
+                const x = e.touches[0].pageX;
+                const walk = (touchStartX - x) * 2;
+                element.scrollLeft = touchScrollLeft + walk;
+            });
+        }
+
+        // Enable drag scroll on both thumbnail strips
+        enableDragScroll(thumbnailStrip);
+        enableDragScroll(refThumbnailStrip);
     </script>
 </body>
 </html>
