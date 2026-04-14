@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>친구 추가 화면 프로토타입 비교</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .prototype-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 0;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prototype-card:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .prototype-card.active {
+            border: 2px solid #3b82f6;
+        }
+
+        .card-header {
+            padding: 20px 20px 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            position: relative;
+        }
+
+        .best-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .recommended-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #6b7280;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            letter-spacing: -0.2px;
+        }
+
+        .card-name {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 480px;
+            object-fit: contain;
+            background: #fafafa;
+            padding: 24px;
+        }
+
+        .pros-cons {
+            padding: 20px;
+            background: #fafafa;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .pros, .cons {
+            margin-bottom: 16px;
+        }
+
+        .pros:last-child, .cons:last-child {
+            margin-bottom: 0;
+        }
+
+        .pros h4 {
+            color: #059669;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cons h4 {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            font-size: 0.8125rem;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+
+        .pros li {
+            margin-bottom: 6px;
+        }
+
+        .cons li {
+            margin-bottom: 6px;
+        }
+
+        .pros li::before {
+            content: "• ";
+            color: #059669;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .cons li::before {
+            content: "• ";
+            color: #dc2626;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .reference-btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px 20px;
+            background: #ffffff;
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .reference-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .reference-btn:disabled {
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #e5e7eb;
+            color: #1a1a1a;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .image-viewer {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .main-image-container {
+            text-align: center;
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #f3f4f6;
+        }
+
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: contain;
+        }
+
+        .image-counter {
+            margin-top: 16px;
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .thumbnail-strip {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            justify-content: center;
+        }
+
+        .thumbnail-item {
+            flex-shrink: 0;
+            width: 80px;
+            height: 120px;
+            cursor: pointer;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            overflow: hidden;
+        }
+
+        .thumbnail-item:hover {
+            border-color: #d1d5db;
+        }
+
+        .thumbnail-item.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .nav-btn {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #333;
+        }
+
+        .nav-btn:disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .prototype-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .thumbnail {
+                height: 380px;
+            }
+
+            .modal-content {
+                padding: 24px;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find friends UI테스트 비교</h1>
+        <p class="subtitle">각 디자인을 클릭하면 상세 화면을 볼 수 있습니다</p>
+
+        <div class="prototype-grid">
+            <!-- Prototype E -->
+            <div class="prototype-card" data-prototype="E">
+                <div class="card-header">
+                    <div class="best-badge">Best</div>
+                    <div class="card-title">Type E</div>
+                    <div class="card-name">미니멀 텍스트 탭</div>
+                </div>
+                <img src="E-1.png" alt="Prototype E" class="thumbnail">
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>👍 장점</h4>
+                        <ul>
+                            <li>상단 한 줄에 탭이 정리되어 시선 이동이 가장 짧고 직관적</li>
+                            <li>굵기와 밑줄로 선택 상태가 명확해 한 눈에 현재 위치 파악</li>
+                            <li>라디오 버튼이나 아이콘 없어 해석 부담이 가장 적음</li>
+                            <li>화면 여백이 넓어 고급스럽고 세련된 분위기 연출</li>
+                            <li>검색 아이콘이 입력 필드 안에 있어 공간 효율 최고</li>
+                            <li>불필요한 시각 요소 제거로 콘텐츠에 집중 유도</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>👎 단점</h4>
+                        <ul>
+                            <li>비활성 탭이 회색 텍스트로만 표시되어 구분이 다소 약함</li>
+                            <li>터치 영역이 텍스트 크기에 한정되어 오조작 가능성</li>
+                            <li>시니어나 디지털 문해력이 낮은 사용자에게 다소 어려울 수 있음</li>
+                        </ul>
+                    </div>
+                    <button class="reference-btn" onclick="openReferenceModal('E', event)">
+                        레퍼런스 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Prototype A -->
+            <div class="prototype-card" data-prototype="A">
+                <div class="card-header">
+                    <div class="recommended-badge">추천</div>
+                    <div class="card-title">Type A</div>
+                    <div class="card-name">탭 버튼 스타일</div>
+                </div>
+                <img src="A-1.png" alt="Prototype A" class="thumbnail">
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>👍 장점</h4>
+                        <ul>
+                            <li>박스 형태로 터치 영역이 넓어 모바일 조작성 우수</li>
+                            <li>선택된 탭의 배경색으로 현재 위치를 즉시 파악 가능</li>
+                            <li>대부분의 앱에서 사용하는 패턴으로 학습 비용 제로</li>
+                            <li>시니어 사용자도 쉽게 이해할 수 있는 명확한 구조</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>👎 단점</h4>
+                        <ul>
+                            <li>2010년대 초반 iOS 스타일로 트렌디하지 않음</li>
+                            <li>박스 테두리가 두꺼워 무거운 느낌</li>
+                            <li>LINE의 젊은 브랜드 이미지와 다소 불일치</li>
+                        </ul>
+                    </div>
+                    <button class="reference-btn" onclick="openReferenceModal('A', event)">
+                        레퍼런스 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Prototype B -->
+            <div class="prototype-card" data-prototype="B">
+                <div class="card-header">
+                    <div class="recommended-badge">추천</div>
+                    <div class="card-title">Type B</div>
+                    <div class="card-name">라디오 버튼 스타일</div>
+                </div>
+                <img src="B-1.png" alt="Prototype B" class="thumbnail">
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>👍 장점</h4>
+                        <ul>
+                            <li>라디오 버튼으로 선택 상태를 명확히 인지 가능</li>
+                            <li>검색 아이콘이 각 입력 필드의 목적을 직관적으로 전달</li>
+                            <li>깔끔한 라운드 디자인으로 모던하고 세련된 느낌</li>
+                            <li>여백과 타이포그래피 균형이 우수해 가독성 최상</li>
+                            <li>기능성과 심미성을 모두 만족하는 밸런스형 디자인</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>👎 단점</h4>
+                        <ul>
+                            <li>라디오 버튼이 탭 전환보다는 폼 입력처럼 보일 수 있음</li>
+                            <li>아이콘과 버튼 요소가 많아 시각적으로 다소 복잡함</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prototype C -->
+            <div class="prototype-card" data-prototype="C">
+                <div class="card-header">
+                    <div class="card-title">Type C</div>
+                    <div class="card-name">왼쪽 타이틀 + 소형 탭</div>
+                </div>
+                <img src="C-1.png" alt="Prototype C" class="thumbnail">
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>👍 장점</h4>
+                        <ul>
+                            <li>타이틀과 탭을 분리해 정보 계층이 명확함</li>
+                            <li>상단 공간을 압축해 콘텐츠 영역 확보에 유리</li>
+                            <li>우측 소형 탭이 부가 기능처럼 보여 심리적 부담 감소</li>
+                            <li>한 눈에 페이지 맥락을 파악하기 쉬운 구조</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>👎 단점</h4>
+                        <ul>
+                            <li>탭 버튼이 너무 작아서 터치 실수 가능성 높음 (최소 44px 권장)</li>
+                            <li>"Find friends" 타이틀과 탭이 같은 줄에 있어 혼란스러움</li>
+                            <li>작은 탭이 중요한 기능임을 인지하기 어려움</li>
+                            <li>첫 사용자가 탭 전환 기능을 발견하지 못할 위험</li>
+                            <li>좌우 정렬이 달라 시선 흐름이 불안정함</li>
+                        </ul>
+                    </div>
+                    <button class="reference-btn" onclick="openReferenceModal('C', event)">
+                        레퍼런스 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Prototype D -->
+            <div class="prototype-card" data-prototype="D">
+                <div class="card-header">
+                    <div class="card-title">Type D</div>
+                    <div class="card-name">아이콘 + 텍스트 탭</div>
+                </div>
+                <img src="D-1.png" alt="Prototype D" class="thumbnail">
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>👍 장점</h4>
+                        <ul>
+                            <li>아이콘이 각 탭의 기능을 시각적으로 명확히 설명</li>
+                            <li>아이콘+텍스트 조합으로 다국어 사용자에게 유리</li>
+                            <li>시니어나 디지털 문해력이 낮은 사용자도 쉽게 이해</li>
+                            <li>브랜드 아이덴티티를 강화할 수 있는 커스텀 아이콘 활용 가능</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>👎 단점</h4>
+                        <ul>
+                            <li>아이콘 2개가 탭 영역을 과도하게 차지해 무거워 보임</li>
+                            <li>텍스트만으로 충분한데 아이콘이 중복 정보 제공</li>
+                            <li>아이콘 의미가 명확하지 않으면 오히려 혼란 야기</li>
+                            <li>수평 공간을 많이 사용해 콘텐츠 영역 압박</li>
+                        </ul>
+                    </div>
+                    <button class="reference-btn" onclick="openReferenceModal('D', event)">
+                        레퍼런스 보기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prototype Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeBtn">×</button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Prototype A</h2>
+            </div>
+            <div class="image-viewer">
+                <div class="main-image-container">
+                    <img src="A-1.png" alt="Main Image" class="main-image" id="mainImage">
+                    <div class="image-counter" id="imageCounter">1 / 6</div>
+                </div>
+                <div class="thumbnail-strip" id="thumbnailStrip"></div>
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="prevBtn">← 이전</button>
+                    <button class="nav-btn" id="nextBtn">다음 →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reference Modal -->
+    <div class="modal" id="referenceModal">
+        <div class="modal-content">
+            <button class="close-btn" id="refCloseBtn">×</button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="refModalTitle">Type A - 레퍼런스</h2>
+            </div>
+            <div class="image-viewer">
+                <div class="main-image-container">
+                    <img src="" alt="Reference Image" class="main-image" id="refMainImage">
+                    <div class="image-counter" id="refImageCounter">1 / 17</div>
+                </div>
+                <div class="thumbnail-strip" id="refThumbnailStrip"></div>
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="refPrevBtn">← 이전</button>
+                    <button class="nav-btn" id="refNextBtn">다음 →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const prototypes = ['A', 'B', 'C', 'D', 'E'];
+        let currentPrototype = 'A';
+        let currentIndex = 0;
+        const totalImages = 6;
+
+        const modal = document.getElementById('modal');
+        const closeBtn = document.getElementById('closeBtn');
+        const mainImage = document.getElementById('mainImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const imageCounter = document.getElementById('imageCounter');
+        const thumbnailStrip = document.getElementById('thumbnailStrip');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Reference modal elements
+        const referenceModal = document.getElementById('referenceModal');
+        const refCloseBtn = document.getElementById('refCloseBtn');
+        const refMainImage = document.getElementById('refMainImage');
+        const refModalTitle = document.getElementById('refModalTitle');
+        const refImageCounter = document.getElementById('refImageCounter');
+        const refThumbnailStrip = document.getElementById('refThumbnailStrip');
+        const refPrevBtn = document.getElementById('refPrevBtn');
+        const refNextBtn = document.getElementById('refNextBtn');
+
+        let currentRefType = 'A';
+        let currentRefIndex = 0;
+        let refImages = [];
+
+        // Reference image lists
+        const referenceImages = {
+            'A': [
+                'ANZ Plus iOS 104.png',
+                'ANZ Plus iOS 168.png',
+                'Acorns iOS 77.png',
+                'Airtime iOS 279.png',
+                'Clubhouse iOS 74.png',
+                'Discord iOS 2.png',
+                'Discord iOS 286.png',
+                'Discord iOS 287.png',
+                'Discord iOS 451.png',
+                'Discord iOS 453.png',
+                'Paramount+ iOS 4.png',
+                'Reminders iOS 68.png',
+                'Shake Shack iOS 13.png',
+                'Sonos iOS 69.png',
+                'Speak iOS 173.png',
+                'Tinder iOS 338.png',
+                'Todoist iOS 199.png'
+            ],
+            'C': [
+                'ANZ Plus iOS 78.png',
+                'PlayStation App iOS 266.png',
+                'Stake iOS 51.png',
+                'Taco Bell iOS 15.png',
+                'Threads iOS 52.png',
+                'Withings Health Mate iOS 342.png',
+                'eBay iOS 130.png'
+            ],
+            'D': [
+                'Breaker iOS 6261.png',
+                'Duolingo iOS 29520.png',
+                'Fitbit iOS 447.png',
+                'IRL iOS 78.png',
+                'IRL iOS 85.png',
+                'Strava iOS 292.png',
+                'Strava iOS 296.png'
+            ],
+            'E': [
+                'AllTrails iOS 170.png',
+                'ClassPass iOS 10794.png',
+                'ClassPass iOS 194.png',
+                'ClassPass iOS 216.png',
+                'Discord iOS 37.png',
+                'Hevy iOS 204.png',
+                'IRL iOS 4.png',
+                'Instagram iOS 127.png',
+                'Nike Run Club iOS 258.png',
+                'Peanut iOS 175.png',
+                'Pinterest iOS 98.png',
+                'Remind iOS 21.png',
+                'Slack iOS 120.png',
+                'Slack iOS 249.png',
+                'Slack iOS 251.png',
+                'Slack iOS 252.png',
+                'Spotify iOS 3883.png',
+                'Strava iOS 299.png',
+                'TheFork iOS 133.png',
+                'TheFork iOS 79.png',
+                'Tinder iOS 342.png',
+                'VSCO iOS 215.png',
+                'eBay iOS 507.png'
+            ]
+        };
+
+        // Open modal
+        document.querySelectorAll('.prototype-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // 레퍼런스 버튼 클릭이면 무시
+                if (e.target.closest('.reference-btn')) {
+                    return;
+                }
+                currentPrototype = this.dataset.prototype;
+                currentIndex = 0;
+                openModal();
+            });
+        });
+
+        // Close modal
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Navigation
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateImage();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < totalImages - 1) {
+                currentIndex++;
+                updateImage();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (modal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    currentIndex--;
+                    updateImage();
+                } else if (e.key === 'ArrowRight' && currentIndex < totalImages - 1) {
+                    currentIndex++;
+                    updateImage();
+                } else if (e.key === 'Escape') {
+                    closeModal();
+                }
+            }
+        });
+
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateImage();
+            createThumbnails();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateImage() {
+            const imageNum = currentIndex + 1;
+            mainImage.src = `${currentPrototype}-${imageNum}.png`;
+            modalTitle.textContent = `Prototype ${currentPrototype} - 화면 ${imageNum}`;
+            imageCounter.textContent = `${imageNum} / ${totalImages}`;
+
+            // Update button states
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === totalImages - 1;
+
+            // Update thumbnail active state
+            document.querySelectorAll('.thumbnail-item').forEach((thumb, index) => {
+                if (index === currentIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+
+        function createThumbnails() {
+            thumbnailStrip.innerHTML = '';
+            for (let i = 1; i <= totalImages; i++) {
+                const thumbDiv = document.createElement('div');
+                thumbDiv.className = 'thumbnail-item';
+                if (i === 1) thumbDiv.classList.add('active');
+
+                const thumbImg = document.createElement('img');
+                thumbImg.src = `${currentPrototype}-${i}.png`;
+                thumbImg.alt = `Screen ${i}`;
+
+                thumbDiv.appendChild(thumbImg);
+                thumbDiv.addEventListener('click', () => {
+                    currentIndex = i - 1;
+                    updateImage();
+                });
+
+                thumbnailStrip.appendChild(thumbDiv);
+            }
+        }
+
+        // Reference Modal Functions
+        function openReferenceModal(type, e) {
+            if (e) {
+                e.stopPropagation();
+            }
+            currentRefType = type;
+            currentRefIndex = 0;
+            refImages = referenceImages[type] || [];
+
+            if (refImages.length === 0) return;
+
+            referenceModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateRefImage();
+            createRefThumbnails();
+        }
+
+        function closeRefModal() {
+            referenceModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateRefImage() {
+            refMainImage.src = `레퍼런스/Type ${currentRefType}/${refImages[currentRefIndex]}`;
+            refModalTitle.textContent = `Type ${currentRefType} - 레퍼런스`;
+            refImageCounter.textContent = `${currentRefIndex + 1} / ${refImages.length}`;
+
+            refPrevBtn.disabled = currentRefIndex === 0;
+            refNextBtn.disabled = currentRefIndex === refImages.length - 1;
+
+            document.querySelectorAll('#refThumbnailStrip .thumbnail-item').forEach((thumb, index) => {
+                if (index === currentRefIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+
+        function createRefThumbnails() {
+            refThumbnailStrip.innerHTML = '';
+            refImages.forEach((img, index) => {
+                const thumbDiv = document.createElement('div');
+                thumbDiv.className = 'thumbnail-item';
+                if (index === 0) thumbDiv.classList.add('active');
+
+                const thumbImg = document.createElement('img');
+                thumbImg.src = `레퍼런스/Type ${currentRefType}/${img}`;
+                thumbImg.alt = `Reference ${index + 1}`;
+
+                thumbDiv.appendChild(thumbImg);
+                thumbDiv.addEventListener('click', () => {
+                    currentRefIndex = index;
+                    updateRefImage();
+                });
+
+                refThumbnailStrip.appendChild(thumbDiv);
+            });
+        }
+
+        // Reference modal events
+        refCloseBtn.addEventListener('click', closeRefModal);
+        referenceModal.addEventListener('click', function(e) {
+            if (e.target === referenceModal) {
+                closeRefModal();
+            }
+        });
+
+        refPrevBtn.addEventListener('click', () => {
+            if (currentRefIndex > 0) {
+                currentRefIndex--;
+                updateRefImage();
+            }
+        });
+
+        refNextBtn.addEventListener('click', () => {
+            if (currentRefIndex < refImages.length - 1) {
+                currentRefIndex++;
+                updateRefImage();
+            }
+        });
+
+        // Keyboard navigation for reference modal
+        document.addEventListener('keydown', (e) => {
+            if (referenceModal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft' && currentRefIndex > 0) {
+                    currentRefIndex--;
+                    updateRefImage();
+                } else if (e.key === 'ArrowRight' && currentRefIndex < refImages.length - 1) {
+                    currentRefIndex++;
+                    updateRefImage();
+                } else if (e.key === 'Escape') {
+                    closeRefModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
