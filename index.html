@@ -570,19 +570,18 @@
                 <div class="card-header">
                     <div class="best-badge">Best</div>
                     <div class="card-title">Type E</div>
-                    <div class="card-name">미니멀 텍스트 탭</div>
+                    <div class="card-name">LDS 탭 (2개 탭 버전)</div>
                 </div>
                 <img src="E-1.png" alt="Prototype E" class="thumbnail">
                 <div class="pros-cons">
                     <div class="pros">
                         <h4>👍 장점</h4>
                         <ul>
+                            <li>2개 탭만 있어 화면을 꽉 채워 시원한 느낌</li>
                             <li>상단 한 줄에 탭이 정리되어 시선 이동이 가장 짧고 직관적</li>
                             <li>굵기와 밑줄로 선택 상태가 명확해 한 눈에 현재 위치 파악</li>
                             <li>라디오 버튼이나 아이콘 없어 해석 부담이 가장 적음</li>
                             <li>화면 여백이 넓어 고급스럽고 세련된 분위기 연출</li>
-                            <li>검색 아이콘이 입력 필드 안에 있어 공간 효율 최고</li>
-                            <li>불필요한 시각 요소 제거로 콘텐츠에 집중 유도</li>
                         </ul>
                     </div>
                     <div class="cons">
@@ -591,6 +590,33 @@
                             <li>비활성 탭이 회색 텍스트로만 표시되어 구분이 다소 약함</li>
                             <li>터치 영역이 텍스트 크기에 한정되어 오조작 가능성</li>
                             <li>시니어나 디지털 문해력이 낮은 사용자에게 다소 어려울 수 있음</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prototype E-2 -->
+            <div class="prototype-card" data-prototype="E-2">
+                <div class="card-header">
+                    <div class="card-title">Type E-2</div>
+                    <div class="card-name">LDS 탭 (스크롤 버전)</div>
+                </div>
+                <img src="E-2-1.png" alt="Prototype E-2" class="thumbnail">
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>👍 장점</h4>
+                        <ul>
+                            <li>상단 한 줄에 탭이 정리되어 시선 이동이 가장 짧고 직관적</li>
+                            <li>굵기와 밑줄로 선택 상태가 명확해 한 눈에 현재 위치 파악</li>
+                            <li>라디오 버튼이나 아이콘 없어 해석 부담이 가장 적음</li>
+                            <li>확장성이 뛰어나 탭이 늘어나도 대응 가능</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>👎 단점</h4>
+                        <ul>
+                            <li>비활성 탭이 회색 텍스트로만 표시되어 구분이 다소 약함</li>
+                            <li>터치 영역이 텍스트 크기에 한정되어 오조작 가능성</li>
                         </ul>
                     </div>
                 </div>
@@ -723,8 +749,13 @@
                 <div class="reference-grid">
                     <div class="reference-card" onclick="openReferenceModal('E')">
                         <div class="reference-card-title">Type E</div>
-                        <div class="reference-card-count">미니멀 텍스트 탭</div>
+                        <div class="reference-card-count">LDS 탭 (2개 탭)</div>
                         <div class="reference-card-badge">24개 화면</div>
+                    </div>
+                    <div class="reference-card" onclick="openReferenceModal('E-2')">
+                        <div class="reference-card-title">Type E-2</div>
+                        <div class="reference-card-count">LDS 탭 (스크롤)</div>
+                        <div class="reference-card-badge">5개 화면</div>
                     </div>
                     <div class="reference-card" onclick="openReferenceModal('A')">
                         <div class="reference-card-title">Type A</div>
@@ -824,7 +855,7 @@
     </div>
 
     <script>
-        const prototypes = ['A', 'B', 'C', 'D', 'E'];
+        const prototypes = ['A', 'B', 'C', 'D', 'E', 'E-2'];
         let currentPrototype = 'A';
         let currentIndex = 0;
         const totalImages = 6;
@@ -916,6 +947,13 @@
                 'eBay iOS 507.png',
                 'Spotify iOS 3883.png',
                 'ClassPass iOS 10794.png'
+            ],
+            'E-2': [
+                'AllTrails iOS 170.png',
+                'Discord iOS 37.png',
+                'eBay iOS 507.png',
+                'Remind iOS 21.png',
+                'TheFork iOS 133.png'
             ]
         };
 
