@@ -1751,6 +1751,122 @@
         // Enable drag scroll on both thumbnail strips
         enableDragScroll(thumbnailStrip);
         enableDragScroll(refThumbnailStrip);
+
+        // Interactive Prototype (Final Tab) Navigation
+        let currentFinalScreen = 0;
+        let currentSubTab = 'line-id';
+
+        const finalScreenData = {
+            'line-id': [
+                { img: 'F-1.png', label: '01 초기 화면' },
+                { img: 'F-2.png', label: '02 검색중' },
+                { img: 'F-3.png', label: '03 결과 화면 (검색됨)' },
+                { img: 'F-4.png', label: '04 친구 추가 완료' },
+                { img: 'F-5.png', label: '05 결과 화면 (검색 안됨)' },
+                { img: 'F-6.png', label: '06 새 친구 화면' }
+            ],
+            'phone': [
+                { img: 'F-9.png', label: '01 초기 화면' },
+                { img: 'F-10.png', label: '02 검색중' },
+                { img: 'F-11.png', label: '03 결과 화면 (검색됨)' },
+                { img: 'F-12.png', label: '04 친구 추가 완료' },
+                { img: 'F-13.png', label: '05 결과 화면 (검색 안됨)' },
+                { img: 'F-14.png', label: '06 새 친구 화면' }
+            ]
+        };
+
+        const finalMainScreen = document.getElementById('finalMainScreen');
+        const finalScreenCounter = document.getElementById('finalScreenCounter');
+        const finalPrevBtn = document.getElementById('finalPrevBtn');
+        const finalNextBtn = document.getElementById('finalNextBtn');
+        const finalThumbnails = document.querySelectorAll('.final-thumbnail');
+        const subTabs = document.querySelectorAll('.sub-tab');
+
+        function updateFinalScreen() {
+            const screens = finalScreenData[currentSubTab];
+            const totalScreens = screens.length;
+
+            // Update main screen
+            finalMainScreen.src = screens[currentFinalScreen].img;
+            finalMainScreen.alt = screens[currentFinalScreen].label;
+
+            // Update counter
+            finalScreenCounter.textContent = `화면 ${currentFinalScreen + 1} / ${totalScreens}`;
+
+            // Update thumbnails
+            finalThumbnails.forEach((thumb, index) => {
+                thumb.classList.toggle('active', index === currentFinalScreen);
+                const img = thumb.querySelector('img');
+                img.src = screens[index].img;
+                img.alt = screens[index].label;
+            });
+
+            // Update button states
+            finalPrevBtn.disabled = currentFinalScreen === 0;
+            finalNextBtn.disabled = currentFinalScreen === totalScreens - 1;
+            finalPrevBtn.style.opacity = currentFinalScreen === 0 ? '0.5' : '1';
+            finalNextBtn.style.opacity = currentFinalScreen === totalScreens - 1 ? '0.5' : '1';
+        }
+
+        // Sub-tab switching
+        subTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetSubTab = this.dataset.subtab;
+
+                // Update active tab
+                subTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Update current subtab and reset screen
+                currentSubTab = targetSubTab;
+                currentFinalScreen = 0;
+                updateFinalScreen();
+            });
+        });
+
+        // Navigation buttons
+        finalPrevBtn.addEventListener('click', () => {
+            if (currentFinalScreen > 0) {
+                currentFinalScreen--;
+                updateFinalScreen();
+            }
+        });
+
+        finalNextBtn.addEventListener('click', () => {
+            const totalScreens = finalScreenData[currentSubTab].length;
+            if (currentFinalScreen < totalScreens - 1) {
+                currentFinalScreen++;
+                updateFinalScreen();
+            }
+        });
+
+        // Thumbnail clicks
+        finalThumbnails.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => {
+                currentFinalScreen = index;
+                updateFinalScreen();
+            });
+        });
+
+        // Keyboard navigation for final tab
+        document.addEventListener('keydown', (e) => {
+            // Check if final tab is active
+            const finalTab = document.getElementById('final');
+            if (finalTab && finalTab.classList.contains('active')) {
+                const totalScreens = finalScreenData[currentSubTab].length;
+
+                if (e.key === 'ArrowLeft' && currentFinalScreen > 0) {
+                    currentFinalScreen--;
+                    updateFinalScreen();
+                } else if (e.key === 'ArrowRight' && currentFinalScreen < totalScreens - 1) {
+                    currentFinalScreen++;
+                    updateFinalScreen();
+                }
+            }
+        });
+
+        // Initialize final screen
+        updateFinalScreen();
     </script>
 </body>
 </html>
