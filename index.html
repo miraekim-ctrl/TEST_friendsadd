@@ -672,6 +672,190 @@
                 font-size: 1.25rem;
             }
         }
+
+        /* Interactive Prototype Styles */
+        .interactive-prototype {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .prototype-container {
+            margin-bottom: 32px;
+        }
+
+        .sub-tabs {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+
+        .sub-tab {
+            flex: 1;
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .sub-tab:hover {
+            color: #0f172a;
+        }
+
+        .sub-tab.active {
+            color: #0f172a;
+            border-bottom-color: #0f172a;
+        }
+
+        .prototype-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .screen-nav-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            width: 100%;
+            position: relative;
+        }
+
+        .screen-nav-btn {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .screen-nav-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .screen-counter {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .main-screen-preview {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .final-main-screen {
+            width: 280px;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .final-thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .final-thumbnail {
+            width: 80px;
+            height: auto;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: none;
+            padding: 0;
+        }
+
+        .final-thumbnail:hover {
+            border-color: #cbd5e1;
+            transform: scale(1.05);
+        }
+
+        .final-thumbnail.active {
+            border-color: #06C755;
+            transform: scale(1.05);
+        }
+
+        .final-thumbnail img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .prototype-details {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .details-subtitle {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .details-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .details-list li {
+            font-size: 0.9rem;
+            color: #0f172a;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .details-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .final-main-screen {
+                width: 240px;
+            }
+
+            .final-thumbnail {
+                width: 60px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -960,72 +1144,76 @@
                 </div>
             </div>
 
-            <h3 class="screens-section-title">All Screens</h3>
+            <h3 class="screens-section-title">Interactive Prototype</h3>
 
-            <div class="final-screens-grid">
-                <div class="final-screen-card">
-                    <img src="F-1.png" alt="기본 화면 - ID 탭" class="final-screen-image">
-                    <div class="final-screen-label">01 · 기본 화면 (ID 탭 선택)</div>
+            <!-- Interactive Tab Section -->
+            <div class="interactive-prototype">
+                <div class="prototype-container">
+                    <!-- Sub Tabs for LINE ID / Phone number -->
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-subtab="line-id">LINE ID</button>
+                        <button class="sub-tab" data-subtab="phone">Phone number</button>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="prototype-content">
+                        <!-- Screen Navigation -->
+                        <div class="screen-nav-controls">
+                            <button class="screen-nav-btn" id="finalPrevBtn">← 이전</button>
+                            <span class="screen-counter" id="finalScreenCounter">화면 1 / 6</span>
+                            <button class="screen-nav-btn" id="finalNextBtn">다음 →</button>
+                        </div>
+
+                        <!-- Main Screen Preview -->
+                        <div class="main-screen-preview">
+                            <img src="F-1.png" alt="Screen 1" id="finalMainScreen" class="final-main-screen">
+                        </div>
+
+                        <!-- Thumbnails -->
+                        <div class="final-thumbnails">
+                            <button class="final-thumbnail active" data-screen="0">
+                                <img src="F-1.png" alt="Thumbnail 1">
+                            </button>
+                            <button class="final-thumbnail" data-screen="1">
+                                <img src="F-2.png" alt="Thumbnail 2">
+                            </button>
+                            <button class="final-thumbnail" data-screen="2">
+                                <img src="F-3.png" alt="Thumbnail 3">
+                            </button>
+                            <button class="final-thumbnail" data-screen="3">
+                                <img src="F-4.png" alt="Thumbnail 4">
+                            </button>
+                            <button class="final-thumbnail" data-screen="4">
+                                <img src="F-5.png" alt="Thumbnail 5">
+                            </button>
+                            <button class="final-thumbnail" data-screen="5">
+                                <img src="F-6.png" alt="Thumbnail 6">
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="final-screen-card">
-                    <img src="F-2.png" alt="기본 화면 - 전화번호 탭" class="final-screen-image">
-                    <div class="final-screen-label">02 · 기본 화면 (검색중)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-3.png" alt="검색 결과 - 아직 친구가 아님" class="final-screen-image">
-                    <div class="final-screen-label">03 · 검색 결과 (친구 아님)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-4.png" alt="검색 결과 - 차단 버튼 포함" class="final-screen-image">
-                    <div class="final-screen-label">04 · 검색 결과 (차단 옵션 포함)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-5.png" alt="검색 결과 - 이미 친구" class="final-screen-image">
-                    <div class="final-screen-label">05 · 검색 결과 (이미 친구)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-6.png" alt="자기 자신 검색" class="final-screen-image">
-                    <div class="final-screen-label">06 · 자기 자신 검색</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-7.png" alt="검색 결과 없음 (아이콘 포함)" class="final-screen-image">
-                    <div class="final-screen-label">07 · 검색 결과 없음 (아이콘 O)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-8.png" alt="검색 결과 없음 (아이콘 없음)" class="final-screen-image">
-                    <div class="final-screen-label">08 · 검색 결과 없음 (아이콘 X)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-9.png" alt="기본 화면 - 전화번호 탭" class="final-screen-image">
-                    <div class="final-screen-label">09 · 기본 화면 (전화번호 탭 선택)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-10.png" alt="기본 화면 - LINE ID 탭" class="final-screen-image">
-                    <div class="final-screen-label">10 · 기본 화면 (검색중)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-11.png" alt="검색 결과 - 친구 아님" class="final-screen-image">
-                    <div class="final-screen-label">11 · 검색 결과 (친구 아님)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-12.png" alt="검색 결과 - 차단 옵션 포함" class="final-screen-image">
-                    <div class="final-screen-label">12 · 검색 결과 (차단 옵션 포함)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-13.png" alt="검색 결과 - 이미 친구" class="final-screen-image">
-                    <div class="final-screen-label">13 · 검색 결과 (이미 친구)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-14.png" alt="자기 자신 검색" class="final-screen-image">
-                    <div class="final-screen-label">14 · 자기 자신 검색</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-15.png" alt="검색 결과 없음 (아이콘 O)" class="final-screen-image">
-                    <div class="final-screen-label">15 · 검색 결과 없음 (아이콘 O)</div>
-                </div>
-                <div class="final-screen-card">
-                    <img src="F-16.png" alt="검색 결과 없음 (아이콘 X)" class="final-screen-image">
-                    <div class="final-screen-label">16 · 검색 결과 없음 (아이콘 X)</div>
+
+                <!-- Details -->
+                <div class="prototype-details">
+                    <h3 class="summary-title">Type E: Full-width Tabs (전체 너비 탭)</h3>
+                    <div class="details-grid">
+                        <div>
+                            <h4 class="details-subtitle">✅ 장점</h4>
+                            <ul class="details-list">
+                                <li>낮은 화면 밀도로 콘텐츠 집중도가 높음</li>
+                                <li>LINE Design System 가이드라인 준수</li>
+                                <li>명확한 시각적 위계</li>
+                                <li>터치하기 쉬운 크기 (최소 44px)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="details-subtitle">📝 특징</h4>
+                            <ul class="details-list">
+                                <li>2개의 고정 탭 구조</li>
+                                <li>탭 확장 불필요 (LINE ID / 전화번호만 사용)</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
